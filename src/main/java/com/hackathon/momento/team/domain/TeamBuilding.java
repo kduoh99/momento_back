@@ -1,25 +1,23 @@
-package com.hackathon.momento.team;
+package com.hackathon.momento.team.domain;
 
+import com.hackathon.momento.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class TeamBuilding {
+public class TeamBuilding extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,15 +36,12 @@ public class TeamBuilding {
     @Column(nullable = false)
     private String position;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
-
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Status status;
 
     @Builder
-    private TeamBuilding(LocalDate startDate, LocalDate endDate, int teamSize, String position, String status) {
+    private TeamBuilding(LocalDate startDate, LocalDate endDate, int teamSize, String position, Status status) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.teamSize = teamSize;

@@ -1,6 +1,6 @@
-package com.hackathon.momento.team;
+package com.hackathon.momento.team.domain;
 
-import com.hackathon.momento.member.Member;
+import com.hackathon.momento.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,24 +17,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TeamBuildingMember {
+public class TeamInfoMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_building_member_id")
+    @Column(name = "team_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_building_id", nullable = false)
-    private TeamBuilding teamBuilding;
+    @JoinColumn(name = "team_info_id", nullable = false)
+    private TeamInfo teamInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Builder
-    private TeamBuildingMember(TeamBuilding teamBuilding, Member member) {
-        this.teamBuilding = teamBuilding;
+    private TeamInfoMember(TeamInfo teamInfo, Member member) {
+        this.teamInfo = teamInfo;
         this.member = member;
     }
 }
