@@ -17,7 +17,24 @@ spring:
         format_sql: true
     open-in-view: false
 
+  data:
+    redis:
+      port: ${REDIS_PORT}
+      host: ${REDIS_SERVER}
+
 logging:
   level:
     org.hibernate.sql: debug
     org.hibernate.type: trace
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-validity-in-milliseconds: ${ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
+  refresh-token-validity-in-milliseconds: ${REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}
+
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    redirect-uri: ${KAKAO_REDIRECT_URI}
+    admin-key: ${KAKAO_ADMIN_KEY}
+    token-url: ${KAKAO_TOKEN_URL}

@@ -1,5 +1,6 @@
-package com.hackathon.momento.member;
+package com.hackathon.momento.member.domain;
 
+import com.hackathon.momento.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +38,6 @@ public class Member {
     private String ability;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private RoleType roleType;
 
     @Builder
