@@ -1,6 +1,7 @@
 package com.hackathon.momento.member.application;
 
 import com.hackathon.momento.member.api.dto.request.ProfileReqDto;
+import com.hackathon.momento.member.api.dto.request.UpdateProfileReqDto;
 import com.hackathon.momento.member.api.dto.response.ProfileResDto;
 import com.hackathon.momento.member.domain.Member;
 import com.hackathon.momento.member.domain.repository.MemberRepository;
@@ -37,6 +38,16 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
+        return ProfileResDto.from(member);
+    }
+
+    @Transactional
+    public ProfileResDto updateProfile(Principal principal, UpdateProfileReqDto reqDto) {
+        Long memberId = Long.parseLong(principal.getName());
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        member.updateProfile(reqDto.name(), reqDto.stack(), reqDto.persona(), reqDto.ability());
         return ProfileResDto.from(member);
     }
 }

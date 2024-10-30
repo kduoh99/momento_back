@@ -58,4 +58,11 @@ public class Member extends BaseEntity {
         this.ability = ability;
         this.isFirstLogin = false;
     }
+
+    public void updateProfile(String name, String stack, String persona, String ability) {
+        this.name = name;
+        this.stack = stack;
+        this.persona = persona;
+        this.ability = ability;
+    }
 }

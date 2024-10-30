@@ -2,6 +2,7 @@ package com.hackathon.momento.member.api;
 
 import com.hackathon.momento.global.template.RspTemplate;
 import com.hackathon.momento.member.api.dto.request.ProfileReqDto;
+import com.hackathon.momento.member.api.dto.request.UpdateProfileReqDto;
 import com.hackathon.momento.member.api.dto.response.ProfileResDto;
 import com.hackathon.momento.member.application.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +42,7 @@ public class MemberController {
             @Valid @RequestBody ProfileReqDto reqDto) {
 
         memberService.completeProfile(principal, reqDto);
-        return new RspTemplate<>(HttpStatus.OK, "프로필이 성공적으로 완성되었습니다.");
+        return new RspTemplate<>(HttpStatus.OK, "프로필 완성!");
     }
 
     @GetMapping("/profile")
@@ -56,5 +58,24 @@ public class MemberController {
     public RspTemplate<ProfileResDto> getProfile(Principal principal) {
         ProfileResDto profile = memberService.getProfile(principal);
         return new RspTemplate<>(HttpStatus.OK, "프로필 조회 성공", profile);
+    }
+
+    @PatchMapping("/update-profile")
+    @Operation(
+            summary = "프로필 수정",
+            description = "현재 로그인한 사용자의 프로필 정보를 수정합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "프로필 수정 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "404", description = "사용자 정보 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    public RspTemplate<ProfileResDto> updateProfile(
+            Principal principal,
+            @Valid @RequestBody UpdateProfileReqDto reqDto) {
+
+        ProfileResDto updatedProfile = memberService.updateProfile(principal, reqDto);
+        return new RspTemplate<>(HttpStatus.OK, "프로필 수정 성공", updatedProfile);
     }
 }
