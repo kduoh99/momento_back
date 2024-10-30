@@ -21,9 +21,7 @@ public class MemberService {
 
     @Transactional
     public void completeProfile(Principal principal, ProfileReqDto reqDto) {
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+        Member member = getMemberByPrincipal(principal);
 
         if (!member.isFirstLogin()) {
             throw new FirstLoginOnlyException();
@@ -34,20 +32,22 @@ public class MemberService {
     }
 
     public ProfileResDto getProfile(Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+        Member member = getMemberByPrincipal(principal);
 
         return ProfileResDto.from(member);
     }
 
     @Transactional
     public ProfileResDto updateProfile(Principal principal, UpdateProfileReqDto reqDto) {
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-
+        Member member = getMemberByPrincipal(principal);
         member.updateProfile(reqDto.name(), reqDto.stack(), reqDto.persona(), reqDto.ability());
+
         return ProfileResDto.from(member);
+    }
+
+    private Member getMemberByPrincipal(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }
