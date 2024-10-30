@@ -1,6 +1,7 @@
 package com.hackathon.momento.member.application;
 
 import com.hackathon.momento.member.api.dto.request.ProfileReqDto;
+import com.hackathon.momento.member.api.dto.response.ProfileResDto;
 import com.hackathon.momento.member.domain.Member;
 import com.hackathon.momento.member.domain.repository.MemberRepository;
 import com.hackathon.momento.member.exception.FirstLoginOnlyException;
@@ -19,7 +20,7 @@ public class MemberService {
 
     @Transactional
     public void completeProfile(Principal principal, ProfileReqDto reqDto) {
-        Long memberId = Long.valueOf(principal.getName());
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -29,5 +30,13 @@ public class MemberService {
 
         member.completeProfile(reqDto.stack(), reqDto.persona(), reqDto.ability());
         memberRepository.save(member);
+    }
+
+    public ProfileResDto getProfile(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        return ProfileResDto.from(member);
     }
 }
