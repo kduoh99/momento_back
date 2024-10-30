@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
 
     private String ability;
 
+    private boolean isFirstLogin = true;
+
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
@@ -48,5 +50,12 @@ public class Member extends BaseEntity {
         this.persona = persona;
         this.ability = ability;
         this.roleType = roleType;
+    }
+
+    public void completeProfile(String stack, String persona, String ability) {
+        this.stack = stack;
+        this.persona = persona;
+        this.ability = ability;
+        this.isFirstLogin = false;
     }
 }
