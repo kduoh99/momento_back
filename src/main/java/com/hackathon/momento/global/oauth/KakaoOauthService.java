@@ -3,7 +3,7 @@ package com.hackathon.momento.global.oauth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackathon.momento.auth.api.dto.AuthResDto;
+import com.hackathon.momento.auth.api.dto.response.AuthResDto;
 import com.hackathon.momento.auth.application.TokenRenewService;
 import com.hackathon.momento.global.jwt.TokenProvider;
 import com.hackathon.momento.global.oauth.exception.OauthException;

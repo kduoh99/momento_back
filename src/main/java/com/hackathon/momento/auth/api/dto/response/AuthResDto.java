@@ -1,4 +1,4 @@
-package com.hackathon.momento.auth.api.dto;
+package com.hackathon.momento.auth.api.dto.response;
 
 import lombok.Builder;
 
