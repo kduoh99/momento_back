@@ -7,7 +7,6 @@ import com.hackathon.momento.team.api.dto.request.TeamBuildingReqDto;
 import com.hackathon.momento.team.domain.Status;
 import com.hackathon.momento.team.domain.repository.TeamBuildingRepository;
 import com.hackathon.momento.team.exception.TeamBuildingConflictException;
-import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +20,8 @@ public class TeamService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void saveTeamBuilding(Principal principal, TeamBuildingReqDto reqDto) {
-        Long memberId = Long.parseLong(principal.getName());
+    public void saveTeamBuilding(Long memberId, TeamBuildingReqDto reqDto) {
+//        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
