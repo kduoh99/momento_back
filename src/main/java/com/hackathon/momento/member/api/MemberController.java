@@ -37,12 +37,12 @@ public class MemberController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    public RspTemplate<String> completeProfile(
+    public RspTemplate<Void> completeProfile(
             Principal principal,
             @Valid @RequestBody ProfileReqDto reqDto) {
 
         memberService.completeProfile(principal, reqDto);
-        return new RspTemplate<>(HttpStatus.OK, "프로필 완성!");
+        return new RspTemplate<>(HttpStatus.OK, "프로필 완성 성공");
     }
 
     @GetMapping("/profile")
