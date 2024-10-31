@@ -1,6 +1,6 @@
 package com.hackathon.momento.auth.api;
 
-import com.hackathon.momento.auth.api.dto.AuthResDto;
+import com.hackathon.momento.auth.api.dto.response.AuthResDto;
 import com.hackathon.momento.global.oauth.KakaoOauthService;
 import com.hackathon.momento.global.template.RspTemplate;
 import io.swagger.v3.oas.annotations.Operation;

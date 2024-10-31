@@ -1,14 +1,15 @@
 package com.hackathon.momento.team.domain;
 
 import com.hackathon.momento.global.entity.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,13 +28,11 @@ public class TeamInfo extends BaseEntity {
     @Column(nullable = false)
     private String teamName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_building_id")
-    private TeamBuilding teamBuilding;
+    @OneToMany(mappedBy = "teamInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamBuilding> teamBuildings = new ArrayList<>();
 
     @Builder
-    private TeamInfo(String teamName, TeamBuilding teamBuilding) {
+    private TeamInfo(String teamName) {
         this.teamName = teamName;
-        this.teamBuilding = teamBuilding;
     }
 }
