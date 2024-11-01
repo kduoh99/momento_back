@@ -7,6 +7,7 @@ import com.hackathon.momento.team.api.dto.Message;
 import com.hackathon.momento.team.api.dto.request.GPTReqDto;
 import com.hackathon.momento.team.api.dto.request.TeamBuildingReqDto;
 import com.hackathon.momento.team.api.dto.response.GPTResDto;
+import com.hackathon.momento.team.api.dto.response.TeamInfoResDto;
 import com.hackathon.momento.team.domain.Status;
 import com.hackathon.momento.team.domain.TeamBuilding;
 import com.hackathon.momento.team.domain.TeamInfo;
@@ -15,6 +16,7 @@ import com.hackathon.momento.team.domain.repository.TeamInfoRepository;
 import com.hackathon.momento.team.exception.TeamBuildingConflictException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -140,5 +142,18 @@ public class TeamService {
         }
 
         return teamInfos;
+    }
+
+    public List<TeamInfoResDto> getTeamInfoProfile(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        List<TeamBuilding> completedTeams = teamBuildingRepository.findByMemberAndStatus(member,
+                Status.COMPLETED);
+
+        return completedTeams.stream()
+                .map(TeamBuilding::getTeamInfo)
+                .map(TeamInfoResDto::from)
+                .collect(Collectors.toList());
     }
 }

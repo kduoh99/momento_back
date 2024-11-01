@@ -2,13 +2,16 @@ package com.hackathon.momento.team.api;
 
 import com.hackathon.momento.global.template.RspTemplate;
 import com.hackathon.momento.team.api.dto.request.TeamBuildingReqDto;
+import com.hackathon.momento.team.api.dto.response.TeamInfoResDto;
 import com.hackathon.momento.team.application.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,7 @@ public class TeamController {
             @Valid @RequestBody TeamBuildingReqDto reqDto) {
 
         teamService.saveTeamBuilding(TEMP_MEMBER_ID, reqDto);
-        return new RspTemplate<>(HttpStatus.OK, "팀 빌딩 정보 저장 성공");
+        return new RspTemplate<>(HttpStatus.CREATED, "팀 빌딩 정보 저장 성공");
     }
 
     @PostMapping("/execute-building")
@@ -56,5 +59,20 @@ public class TeamController {
 
         teamService.executeTeamBuilding();
         return new RspTemplate<>(HttpStatus.OK, "AI 팀 빌딩 요청 성공");
+    }
+
+    @GetMapping("/completed-profile")
+    @Operation(
+            summary = "완성된 팀 정보 조회",
+            description = "사용자의 완성된 팀 정보를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "팀 정보 조회 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    public RspTemplate<List<TeamInfoResDto>> getTeamInfoProfile() {
+        List<TeamInfoResDto> teamProfile = teamService.getTeamInfoProfile(TEMP_MEMBER_ID);
+        return new RspTemplate<>(HttpStatus.OK, "팀 정보 조회 성공", teamProfile);
     }
 }

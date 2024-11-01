@@ -13,4 +13,6 @@ public interface TeamBuildingRepository extends JpaRepository<TeamBuilding, Long
     boolean existsByMemberAndStatus(Member member, Status status);
 
     List<TeamBuilding> findByStatus(Status status);
+
+    List<TeamBuilding> findByMemberAndStatus(Member member, Status status);
 }
