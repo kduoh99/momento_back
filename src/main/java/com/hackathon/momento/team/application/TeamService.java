@@ -107,14 +107,22 @@ public class TeamService {
         TeamInfo currentTeam = null;
 
         for (String line : lines) {
-            if (line.startsWith("팀 이름: ")) {
+            line = line.trim();
+
+            if (line.equals("- 팀 시작 -")) {
                 if (currentTeam != null) {
                     teamInfos.add(currentTeam);
                 }
+                currentTeam = TeamInfo.builder().build();
+
+            } else if (line.startsWith("팀 이름: ")) {
                 String teamName = line.replace("팀 이름: ", "").trim();
-                currentTeam = TeamInfo.builder()
-                        .teamName(teamName)
-                        .build();
+                if (currentTeam != null) {
+                    currentTeam = TeamInfo.builder()
+                            .teamName(teamName)
+                            .build();
+                }
+
             } else if (line.startsWith("팀 설명: ")) {
                 String description = line.replace("팀 설명: ", "").trim();
                 if (currentTeam != null) {
@@ -123,16 +131,22 @@ public class TeamService {
                             .description(description)
                             .build();
                 }
+
             } else if (line.startsWith("- 이메일: ")) {
                 String email = line.replace("- 이메일: ", "").trim();
                 if (currentTeam != null) {
                     for (TeamBuilding request : requests) {
                         if (request.getMember().getEmail().equals(email)) {
-                            request.assignTeamInfo(currentTeam);
-                            request.updateStatus(Status.COMPLETED);
                             currentTeam.addTeamBuilding(request);
+                            request.updateStatus(Status.COMPLETED);
                         }
                     }
+                }
+
+            } else if (line.equals("- 팀 끝 -")) {
+                if (currentTeam != null) {
+                    teamInfos.add(currentTeam);
+                    currentTeam = null;
                 }
             }
         }

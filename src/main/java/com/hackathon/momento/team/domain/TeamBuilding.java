@@ -67,7 +67,7 @@ public class TeamBuilding extends BaseEntity {
         this.member = member;
     }
 
-    public void assignTeamInfo(TeamInfo teamInfo) {
+    protected void setTeamInfo(TeamInfo teamInfo) {
         this.teamInfo = teamInfo;
     }
 
