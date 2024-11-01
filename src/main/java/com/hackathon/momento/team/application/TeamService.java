@@ -156,4 +156,11 @@ public class TeamService {
                 .map(TeamInfoResDto::from)
                 .collect(Collectors.toList());
     }
+
+    public boolean checkDuplicate(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        return teamBuildingRepository.existsByMemberAndStatus(member, Status.PENDING);
+    }
 }
