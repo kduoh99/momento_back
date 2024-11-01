@@ -28,11 +28,20 @@ public class TeamInfo extends BaseEntity {
     @Column(nullable = false)
     private String teamName;
 
+    @Column(length = 1024)
+    private String description;
+
     @OneToMany(mappedBy = "teamInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamBuilding> teamBuildings = new ArrayList<>();
 
     @Builder
-    private TeamInfo(String teamName) {
+    private TeamInfo(String teamName, String description) {
         this.teamName = teamName;
+        this.description = description;
+    }
+
+    public void addTeamBuilding(TeamBuilding teamBuilding) {
+        this.teamBuildings.add(teamBuilding);
+        teamBuilding.assignTeamInfo(this);
     }
 }

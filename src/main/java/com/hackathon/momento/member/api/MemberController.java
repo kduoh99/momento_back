@@ -42,7 +42,7 @@ public class MemberController {
             @Valid @RequestBody ProfileReqDto reqDto) {
 
         memberService.completeProfile(TEMP_MEMBER_ID, reqDto);
-        return new RspTemplate<>(HttpStatus.OK, "프로필 완성 성공");
+        return new RspTemplate<>(HttpStatus.CREATED, "프로필 완성 성공");
     }
 
     @GetMapping("/profile")
