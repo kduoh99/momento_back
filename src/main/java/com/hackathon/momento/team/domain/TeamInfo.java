@@ -42,6 +42,6 @@ public class TeamInfo extends BaseEntity {
 
     public void addTeamBuilding(TeamBuilding teamBuilding) {
         this.teamBuildings.add(teamBuilding);
-        teamBuilding.assignTeamInfo(this);
+        teamBuilding.setTeamInfo(this);
     }
 }
