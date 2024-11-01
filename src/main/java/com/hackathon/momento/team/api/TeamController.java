@@ -75,4 +75,19 @@ public class TeamController {
         List<TeamInfoResDto> teamProfile = teamService.getTeamInfoProfile(TEMP_MEMBER_ID);
         return new RspTemplate<>(HttpStatus.OK, "팀 정보 조회 성공", teamProfile);
     }
+
+    @PostMapping("/check-duplicate")
+    @Operation(
+            summary = "AI 팀 빌딩 요청 중복 검사",
+            description = "사용자의 AI 팀 빌딩 요청이 존재하는지 여부를 검사합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "중복 검사 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    public RspTemplate<String> checkDuplicateRequest() {
+        boolean isDuplicate = teamService.checkDuplicate(TEMP_MEMBER_ID);
+        return new RspTemplate<>(HttpStatus.OK, String.valueOf(isDuplicate));
+    }
 }
