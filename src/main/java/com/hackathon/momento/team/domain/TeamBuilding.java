@@ -66,4 +66,12 @@ public class TeamBuilding extends BaseEntity {
         this.status = status;
         this.member = member;
     }
+
+    public void assignTeamInfo(TeamInfo teamInfo) {
+        this.teamInfo = teamInfo;
+    }
+
+    public void updateStatus(Status status) {
+        this.status = status;
+    }
 }

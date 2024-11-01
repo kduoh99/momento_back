@@ -41,4 +41,20 @@ public class TeamController {
         teamService.saveTeamBuilding(TEMP_MEMBER_ID, reqDto);
         return new RspTemplate<>(HttpStatus.OK, "팀 빌딩 정보 저장 성공");
     }
+
+    @PostMapping("/execute-building")
+    @Operation(
+            summary = "AI 팀 빌딩 요청 (테스트용 수동 요청)",
+            description = "각 사용자의 특성을 고려하여 최적의 팀을 구성합니다. 매일 오후 2시에 자동 실행되지만, 테스트를 위해 수동으로도 요청할 수 있습니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "AI 팀 빌딩 요청 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    public RspTemplate<Void> executeTeamBuilding() {
+
+        teamService.executeTeamBuilding();
+        return new RspTemplate<>(HttpStatus.OK, "AI 팀 빌딩 요청 성공");
+    }
 }
