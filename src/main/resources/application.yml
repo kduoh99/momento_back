@@ -22,6 +22,12 @@ spring:
       port: ${REDIS_PORT}
       host: ${REDIS_SERVER}
 
+  mail:
+    port: ${MAIL_PORT}
+    host: ${MAIL_SERVER}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    
 logging:
   level:
     org.hibernate.sql: debug
