@@ -27,7 +27,7 @@ spring:
     host: ${MAIL_SERVER}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
-    
+
 logging:
   level:
     org.hibernate.sql: debug

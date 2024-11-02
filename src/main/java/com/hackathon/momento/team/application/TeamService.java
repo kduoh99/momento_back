@@ -35,6 +35,7 @@ public class TeamService {
     private final TeamInfoRepository teamInfoRepository;
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
+    private final EmailService emailService;
 
     @Value("${openai.api.url}")
     private String apiURL;
@@ -77,6 +78,43 @@ public class TeamService {
 
             List<TeamInfo> teamInfos = parseResToTeamInfo(resContent, requests);
             teamInfoRepository.saveAll(teamInfos);
+
+            sendTeamCompletionEmails(teamInfos);
+        }
+    }
+
+    private void sendTeamCompletionEmails(List<TeamInfo> teamInfos) {
+        for (TeamInfo teamInfo : teamInfos) {
+            String teamName = teamInfo.getTeamName();
+            String description = teamInfo.getDescription();
+            List<TeamBuilding> teamMembers = teamInfo.getTeamBuildings();
+
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.append("<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto;'>")
+                    .append("<h1 style='background-color: #4CAF50; color: white; padding: 10px; text-align: center;'>")
+                    .append(teamName).append("</h1>")
+                    .append("<p style='font-size: 16px; line-height: 1.5;'>").append(description).append("</p>")
+                    .append("<h2 style='color: #333; margin-top: 20px;'>Team Members</h2>")
+                    .append("<ul style='list-style-type: none; padding: 0;'>");
+
+            for (TeamBuilding memberBuilding : teamMembers) {
+                Member member = memberBuilding.getMember();
+                emailBody.append(
+                                "<li style='background-color: #f9f9f9; margin: 5px 0; padding: 10px; border-radius: 5px;'>")
+                        .append("<strong>Name:</strong> ").append(member.getName()).append("<br>")
+                        .append("<strong>Email:</strong> ").append(member.getEmail()).append("<br>")
+                        .append("<strong>Position:</strong> ").append(memberBuilding.getMyPosition())
+                        .append("</li>");
+            }
+            emailBody.append("</ul>")
+                    .append("<p style='text-align: center; margin-top: 30px;'>")
+                    .append("Thank you for using <strong>TeamUp</strong>")
+                    .append("</p>")
+                    .append("</div>");
+
+            for (TeamBuilding memberBuilding : teamMembers) {
+                emailService.sendMessage(memberBuilding.getMember().getEmail(), emailBody.toString());
+            }
         }
     }
 
