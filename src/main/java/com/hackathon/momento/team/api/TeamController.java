@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "팀", description = "팀을 담당하는 API 그룹")
 public class TeamController {
 
-    private static final Long TEMP_MEMBER_ID = 1L; // 테스트용 임시 사용자 ID
-
     private final TeamService teamService;
 
     @PostMapping("/building")
@@ -38,10 +37,10 @@ public class TeamController {
             }
     )
     public RspTemplate<Void> saveTeamBuilding(
-//            Principal principal,
+            Principal principal,
             @Valid @RequestBody TeamBuildingReqDto reqDto) {
 
-        teamService.saveTeamBuilding(TEMP_MEMBER_ID, reqDto);
+        teamService.saveTeamBuilding(principal, reqDto);
         return new RspTemplate<>(HttpStatus.CREATED, "팀 빌딩 정보 저장 성공");
     }
 
@@ -71,8 +70,8 @@ public class TeamController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    public RspTemplate<List<TeamInfoResDto>> getTeamInfoProfile() {
-        List<TeamInfoResDto> teamProfile = teamService.getTeamInfoProfile(TEMP_MEMBER_ID);
+    public RspTemplate<List<TeamInfoResDto>> getTeamInfoProfile(Principal principal) {
+        List<TeamInfoResDto> teamProfile = teamService.getTeamInfoProfile(principal);
         return new RspTemplate<>(HttpStatus.OK, "팀 정보 조회 성공", teamProfile);
     }
 
@@ -86,8 +85,8 @@ public class TeamController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    public RspTemplate<String> checkDuplicateRequest() {
-        boolean isDuplicate = teamService.checkDuplicate(TEMP_MEMBER_ID);
+    public RspTemplate<String> checkDuplicateRequest(Principal principal) {
+        boolean isDuplicate = teamService.checkDuplicate(principal);
         return new RspTemplate<>(HttpStatus.OK, String.valueOf(isDuplicate));
     }
 }
