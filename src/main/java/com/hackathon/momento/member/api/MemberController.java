@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "사용자 정보", description = "사용자 정보를 담당하는 API 그룹")
 public class MemberController {
 
-    private static final Long TEMP_MEMBER_ID = 1L; // 테스트용 임시 사용자 ID
-
     private final MemberService memberService;
 
     @PutMapping("/complete-profile")
@@ -39,9 +38,10 @@ public class MemberController {
             }
     )
     public RspTemplate<Void> completeProfile(
+            Principal principal,
             @Valid @RequestBody ProfileReqDto reqDto) {
 
-        memberService.completeProfile(TEMP_MEMBER_ID, reqDto);
+        memberService.completeProfile(principal, reqDto);
         return new RspTemplate<>(HttpStatus.CREATED, "프로필 완성 성공");
     }
 
@@ -55,8 +55,8 @@ public class MemberController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    public RspTemplate<ProfileResDto> getProfile() {
-        ProfileResDto profile = memberService.getProfile(TEMP_MEMBER_ID);
+    public RspTemplate<ProfileResDto> getProfile(Principal principal) {
+        ProfileResDto profile = memberService.getProfile(principal);
         return new RspTemplate<>(HttpStatus.OK, "프로필 조회 성공", profile);
     }
 
@@ -72,9 +72,10 @@ public class MemberController {
             }
     )
     public RspTemplate<ProfileResDto> updateProfile(
+            Principal principal,
             @Valid @RequestBody UpdateProfileReqDto reqDto) {
 
-        ProfileResDto updatedProfile = memberService.updateProfile(TEMP_MEMBER_ID, reqDto);
+        ProfileResDto updatedProfile = memberService.updateProfile(principal, reqDto);
         return new RspTemplate<>(HttpStatus.OK, "프로필 수정 성공", updatedProfile);
     }
 }

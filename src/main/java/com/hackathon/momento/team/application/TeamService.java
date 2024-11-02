@@ -14,6 +14,7 @@ import com.hackathon.momento.team.domain.TeamInfo;
 import com.hackathon.momento.team.domain.repository.TeamBuildingRepository;
 import com.hackathon.momento.team.domain.repository.TeamInfoRepository;
 import com.hackathon.momento.team.exception.TeamBuildingConflictException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,10 +48,8 @@ public class TeamService {
     private String promptTemplate;
 
     @Transactional
-    public void saveTeamBuilding(Long memberId, TeamBuildingReqDto reqDto) {
-//        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+    public void saveTeamBuilding(Principal principal, TeamBuildingReqDto reqDto) {
+        Member member = getMemberByPrincipal(principal);
 
         if (teamBuildingRepository.existsByMemberAndStatus(member, Status.PENDING)) {
             throw new TeamBuildingConflictException();
@@ -196,10 +195,8 @@ public class TeamService {
         return teamInfos;
     }
 
-    public List<TeamInfoResDto> getTeamInfoProfile(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-
+    public List<TeamInfoResDto> getTeamInfoProfile(Principal principal) {
+        Member member = getMemberByPrincipal(principal);
         List<TeamBuilding> completedTeams = teamBuildingRepository.findByMemberAndStatus(member,
                 Status.COMPLETED);
 
@@ -209,10 +206,14 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
-    public boolean checkDuplicate(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-
+    public boolean checkDuplicate(Principal principal) {
+        Member member = getMemberByPrincipal(principal);
         return teamBuildingRepository.existsByMemberAndStatus(member, Status.PENDING);
+    }
+
+    private Member getMemberByPrincipal(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }
