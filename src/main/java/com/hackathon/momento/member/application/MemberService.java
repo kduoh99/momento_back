@@ -48,7 +48,7 @@ public class MemberService {
 
     public boolean checkDuplicate(Principal principal) {
         Member member = getMemberByPrincipal(principal);
-        return memberRepository.existsById(member.getId());
+        return member.getStack() == null || member.getPersona() == null || member.getAbility() == null;
     }
 
     private Member getMemberByPrincipal(Principal principal) {

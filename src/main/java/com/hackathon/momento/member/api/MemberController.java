@@ -82,16 +82,16 @@ public class MemberController {
 
     @PostMapping("/check-duplicate")
     @Operation(
-            summary = "이메일 중복 검사",
-            description = "해당 사용자가 존재하는지 여부를 검사합니다.",
+            summary = "최초 로그인 여부 체크",
+            description = "해당 사용자가 최초 로그인인지 체크합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "중복 검사 성공"),
+                    @ApiResponse(responseCode = "200", description = "최초 로그인 여부 체크 성공"),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청"),
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
     public RspTemplate<String> checkDuplicateRequest(Principal principal) {
         boolean isDuplicate = memberService.checkDuplicate(principal);
-        return new RspTemplate<>(HttpStatus.OK, String.valueOf(isDuplicate));
+        return new RspTemplate<>(HttpStatus.OK, "최초 로그인 여부 체크 성공", String.valueOf(isDuplicate));
     }
 }
