@@ -46,6 +46,11 @@ public class MemberService {
         return ProfileResDto.from(member);
     }
 
+    public boolean checkDuplicate(Principal principal) {
+        Member member = getMemberByPrincipal(principal);
+        return memberRepository.existsById(member.getId());
+    }
+
     private Member getMemberByPrincipal(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         return memberRepository.findById(memberId)

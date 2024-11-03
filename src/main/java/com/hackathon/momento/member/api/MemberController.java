@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,5 +78,20 @@ public class MemberController {
 
         ProfileResDto updatedProfile = memberService.updateProfile(principal, reqDto);
         return new RspTemplate<>(HttpStatus.OK, "프로필 수정 성공", updatedProfile);
+    }
+
+    @PostMapping("/check-duplicate")
+    @Operation(
+            summary = "이메일 중복 검사",
+            description = "해당 사용자가 존재하는지 여부를 검사합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "중복 검사 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "서버 오류")
+            }
+    )
+    public RspTemplate<String> checkDuplicateRequest(Principal principal) {
+        boolean isDuplicate = memberService.checkDuplicate(principal);
+        return new RspTemplate<>(HttpStatus.OK, String.valueOf(isDuplicate));
     }
 }
